@@ -1,7 +1,8 @@
 package br.ce.wcaquino.servicos;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 import br.ce.wcaquino.entidades.Usuario;
 
@@ -10,35 +11,35 @@ public class AssertTest {
 	@Test
 	public void test() {
 
-		Assertions.assertTrue(true);
-		Assertions.assertFalse(false);
+		Assert.assertTrue(true);
+		Assert.assertFalse(false);
 		
-		Assertions.assertEquals(1, 1);
-		Assertions.assertEquals(0.51234,0.512,0.001);
-		Assertions.assertEquals(Math.PI,3.14,0.01);
+		Assert.assertEquals(1, 1);
+		Assert.assertEquals(0.51234,0.512,0.001);
+		Assert.assertEquals(Math.PI,3.14,0.01);
 
 		int i = 5;
 		Integer i2 = 5;
-		Assertions.assertEquals(Integer.valueOf(i), i2);
-		Assertions.assertEquals(i, i2.intValue());
+		Assert.assertEquals(Integer.valueOf(i), i2);
+		Assert.assertEquals(i, i2.intValue());
 		
-		Assertions.assertEquals("bola", "bola");
-		Assertions.assertNotEquals("bola", "casa");
-		Assertions.assertTrue("bola".equalsIgnoreCase("Bola"));
-		Assertions.assertTrue("bola".startsWith("bo"));
+		Assert.assertEquals("bola", "bola");
+		Assert.assertNotEquals("bola", "casa");
+		Assert.assertTrue("bola".equalsIgnoreCase("Bola"));
+		Assert.assertTrue("bola".startsWith("bo"));
 	
 		Usuario u1 = new Usuario("Usuário 1");
 		Usuario u2 = new Usuario("Usuário 1");
 		Usuario u3 = null;
 		
-		Assertions.assertEquals(u1, u2); // instâncias diferentes, porém objetos iguais
+		Assert.assertEquals(u1, u2); // instâncias diferentes, porém objetos iguais
 		
-		Assertions.assertSame(u2, u2); // instância diferentes
-		Assertions.assertNotSame(u1, u2);
+		Assert.assertSame(u2, u2); // instância diferentes
+		Assert.assertNotSame(u1, u2);
 		
 		// Verificar se é nulo
 
-		Assertions.assertNull(u3);
-		Assertions.assertNotNull(u2);
+		Assert.assertNull(u3);
+		Assert.assertNotNull(u2);
 	}
 }

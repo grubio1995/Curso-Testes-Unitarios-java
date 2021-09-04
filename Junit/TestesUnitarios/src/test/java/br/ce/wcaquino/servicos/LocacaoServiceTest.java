@@ -3,8 +3,8 @@ package br.ce.wcaquino.servicos;
 
 import java.util.Date;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
@@ -12,7 +12,7 @@ import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.utils.DataUtils;
 
 public class LocacaoServiceTest {
-	
+
 	@Test
 	public void teste() { 
 
@@ -25,9 +25,9 @@ public class LocacaoServiceTest {
 		Locacao locacao = service.alugarFilme(usuario, filme); 
 		 
 		//verificação
-		Assertions.assertEquals(5.0,locacao.getValor(),0.01);
-		Assertions.assertTrue(DataUtils.isMesmaData(locacao.getDataLocacao(),new Date()));
-		Assertions.assertTrue(DataUtils.isMesmaData(locacao.getDataRetorno(),DataUtils.obterDataComDiferencaDias(1)));
+		Assert.assertEquals(5.0,locacao.getValor(),0.01);
+		Assert.assertTrue(DataUtils.isMesmaData(locacao.getDataLocacao(),new Date()));
+		Assert.assertTrue(DataUtils.isMesmaData(locacao.getDataRetorno(),DataUtils.obterDataComDiferencaDias(1)));
 
 	}	
 
