@@ -6,7 +6,10 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,7 +27,9 @@ import br.ce.wcaquino.servicos.exceptions.LocadoraException;
 public class LocacaoServiceTest {
 
 	private LocacaoService service;
-	
+
+	private List<Filme> filmes = new ArrayList<Filme>();
+
 	@Rule
 	public ErrorCollector error = new ErrorCollector();
 
@@ -33,19 +38,21 @@ public class LocacaoServiceTest {
 
 	@Before
 	public void setup() {
+
 		service = new LocacaoService();
+
+		filmes = new ArrayList<Filme>();
 	}
 
-	
 	@Test
 	public void teste() throws Exception {
 
 		// cenario
 		Usuario usuario = new Usuario("Usuário 1");
-		Filme filme = new Filme("Filme 1", 2, 5.0);
+		filmes = Arrays.asList(new Filme("Filme 1", 2, 5.0));
 
 		// acao
-		Locacao locacao = service.alugarFilme(usuario, filme);
+		Locacao locacao = service.alugarFilme(usuario, filmes);
 
 		// verificação
 		error.checkThat(locacao.getValor(), is(equalTo(5.0)));
@@ -59,22 +66,22 @@ public class LocacaoServiceTest {
 
 		// cenario
 		Usuario usuario = new Usuario("Usuário 1");
-		Filme filme = new Filme("Filme 1", 0, 4.0);
+		filmes = Arrays.asList(new Filme("Filme 1", 0, 4.0));
 
 		// acao
-		service.alugarFilme(usuario, filme);
+		service.alugarFilme(usuario, filmes);
 	}
 
 	@Test
 	public void testeLocacao_usuarioVazio() throws FilmeSemEstoqueException { // forma robusta
 
 		// cenario
+		filmes = Arrays.asList(new Filme("Filme 1", 1, 5.0));
 
-		Filme filme = new Filme("Filme 1", 1, 4.0);
 		// acao
 		try {
 
-			service.alugarFilme(null, filme);
+			service.alugarFilme(null, filmes);
 			Assert.fail();
 
 		} catch (LocadoraException e) {
