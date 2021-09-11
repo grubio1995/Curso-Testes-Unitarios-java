@@ -14,7 +14,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
@@ -48,8 +50,9 @@ public class LocacaoServiceTest {
 	}
 
 	@Test
+	@Ignore
 	public void deveAlugarFilme() throws Exception {
-
+		
 		// cenario
 		Usuario usuario = new Usuario("Usuário 1");
 		filmes = Arrays.asList(new Filme("Filme 1", 2, 5.0));
@@ -174,6 +177,7 @@ public class LocacaoServiceTest {
 	
 	@Test
 	public void deveDevolverNaSegunbdaAoAlugarNoSabado() throws FilmeSemEstoqueException, LocadoraException {
+
 		// cenario
 		Usuario usuario = new Usuario("Usuário 1");
 		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0));
