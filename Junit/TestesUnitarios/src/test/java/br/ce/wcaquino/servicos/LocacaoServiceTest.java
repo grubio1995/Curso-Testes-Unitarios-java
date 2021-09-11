@@ -5,13 +5,14 @@ import static br.ce.wcaquino.utils.DataUtils.obterDataComDiferencaDias;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.hamcrest.Matcher;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -24,6 +25,7 @@ import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.servicos.exceptions.FilmeSemEstoqueException;
 import br.ce.wcaquino.servicos.exceptions.LocadoraException;
+import br.ce.wcaquino.utils.DataUtils;
 
 public class LocacaoServiceTest {
 
@@ -167,6 +169,21 @@ public class LocacaoServiceTest {
 		// verificacao
 		// 4 + 4 + 3 + 2 + 1 + 0
 		assertThat(resultado.getValor(), is(14.0));
+
+	}
+	
+	@Test
+	public void deveDevolverNaSegunbdaAoAlugarNoSabado() throws FilmeSemEstoqueException, LocadoraException {
+		// cenario
+		Usuario usuario = new Usuario("Usuário 1");
+		List<Filme> filmes = Arrays.asList(new Filme("Filme 1", 2, 4.0));
+		
+		// acao
+		Locacao retorno = service.alugarFilme(usuario, filmes);
+
+		// verificacao
+		boolean ehSegunda = DataUtils.verificarDiaSemana(retorno.getDataRetorno(), Calendar.MONDAY);
+		assertTrue(ehSegunda);
 
 	}
 }
