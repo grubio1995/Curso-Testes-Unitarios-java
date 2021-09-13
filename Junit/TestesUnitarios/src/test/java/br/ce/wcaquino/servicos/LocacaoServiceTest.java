@@ -1,8 +1,8 @@
 package br.ce.wcaquino.servicos;
 
 import static br.ce.wcaquino.matchers.MatchersPropios.caiNumaSegunda;
-import static br.ce.wcaquino.utils.DataUtils.isMesmaData;
-import static br.ce.wcaquino.utils.DataUtils.obterDataComDiferencaDias;
+import static br.ce.wcaquino.matchers.MatchersPropios.ehHoje;
+import static br.ce.wcaquino.matchers.MatchersPropios.ehHojeComDiferencaDeDias;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -50,7 +50,7 @@ public class LocacaoServiceTest {
 
 	@Test
 	public void deveAlugarFilme() throws Exception {
-		Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+//		Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 
 		// cenario
 		Usuario usuario = new Usuario("Usuário 1");
@@ -61,9 +61,9 @@ public class LocacaoServiceTest {
 
 		// verificação
 		error.checkThat(locacao.getValor(), is(equalTo(5.0)));
-		error.checkThat(isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
-		error.checkThat(isMesmaData(locacao.getDataRetorno(), obterDataComDiferencaDias(1)), is(true));
-
+		error.checkThat(locacao.getDataLocacao(),ehHoje());
+		error.checkThat(locacao.getDataRetorno(),ehHojeComDiferencaDeDias(1));
+	
 	}
 
 	@Test(expected = FilmeSemEstoqueException.class) // forma elegante
