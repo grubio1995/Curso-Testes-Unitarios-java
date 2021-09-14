@@ -23,12 +23,15 @@ import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
+import br.ce.wcaquino.builders.FilmeBuilder;
+import br.ce.wcaquino.builders.LocacaoBuilder;
 import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.servicos.exceptions.FilmeSemEstoqueException;
 import br.ce.wcaquino.servicos.exceptions.LocadoraException;
 import br.ce.wcaquino.utils.DataUtils;
+import buildermaster.BuilderMaster;
 
 public class LocacaoServiceTest {
 
@@ -54,12 +57,12 @@ public class LocacaoServiceTest {
 	public void deveAlugarFilme() throws Exception {
 //		Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 
-		// cenario
-		Usuario usuario = umUsuario().agora();
-		filmes = Arrays.asList(umFilme().comValor(5.0).agora());
-
-		// acao
-		Locacao locacao = service.alugarFilme(usuario, filmes);
+//		// cenario
+//		Usuario usuario = umUsuario().agora();
+//		filmes = Arrays.asList(umFilme().comValor(5.0).agora());
+//
+//		// acao
+		Locacao locacao = LocacaoBuilder.umLocacao().agora();
 
 		// verificação
 		error.checkThat(locacao.getValor(), is(equalTo(5.0)));
@@ -73,7 +76,7 @@ public class LocacaoServiceTest {
 
 		// cenario
 		Usuario usuario = umUsuario().agora();
-		filmes = Arrays.asList(umFilme().semEstoque().agora());
+		filmes = Arrays.asList(FilmeBuilder.umFilmeSemEstoque().agora());
 
 		// acao
 		service.alugarFilme(usuario, filmes);
@@ -126,5 +129,9 @@ public class LocacaoServiceTest {
 		// verificacao
 		assertThat(retorno.getDataRetorno(), caiNumaSegunda());
 
+	}
+	
+	public static void main(String[] args) {
+		new BuilderMaster().gerarCodigoClasse(Locacao.class);
 	}
 }
