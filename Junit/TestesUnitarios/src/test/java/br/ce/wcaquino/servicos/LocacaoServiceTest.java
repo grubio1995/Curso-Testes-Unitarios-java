@@ -65,7 +65,7 @@ public class LocacaoServiceTest {
 		Locacao locacao = LocacaoBuilder.umLocacao().agora();
 
 		// verificação
-		error.checkThat(locacao.getValor(), is(equalTo(5.0)));
+		error.checkThat(locacao.getValor(), is(equalTo(4.0)));
 		error.checkThat(locacao.getDataLocacao(), ehHoje());
 		error.checkThat(locacao.getDataRetorno(), ehHojeComDiferencaDeDias(1));
 
