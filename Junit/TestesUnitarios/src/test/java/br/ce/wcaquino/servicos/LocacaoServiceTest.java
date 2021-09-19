@@ -14,7 +14,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.whenNew;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,7 +80,7 @@ public class LocacaoServiceTest {
 		Usuario usuario = umUsuario().agora();
 		filmes = Arrays.asList(umFilme().comValor(5.0).agora());
 
-		whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(24, 9, 2021));
+		PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(24, 9, 2021));
 		
 		// acao
 		Locacao locacao = service.alugarFilme(usuario, filmes);
@@ -146,14 +146,14 @@ public class LocacaoServiceTest {
 		Usuario usuario = umUsuario().agora();
 		filmes = Arrays.asList(umFilme().agora());
 
-		whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(25, 9, 2021));
+		PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(25, 9, 2021));
 		
 		// acao
 		Locacao retorno = service.alugarFilme(usuario, filmes);
 
 		// verificacao
 		assertThat(retorno.getDataRetorno(), caiNumaSegunda());
-		PowerMockito.verifyNew(Date.class).withNoArguments(); 
+		PowerMockito.verifyNew(Date.class, Mockito.times(2)).withNoArguments(); 
 	}
 	
 	@Test
