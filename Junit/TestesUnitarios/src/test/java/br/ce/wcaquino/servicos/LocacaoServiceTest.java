@@ -6,7 +6,6 @@ import static br.ce.wcaquino.builders.UsuarioBuilder.umUsuario;
 import static br.ce.wcaquino.matchers.MatchersPropios.caiNumaSegunda;
 import static br.ce.wcaquino.matchers.MatchersPropios.ehHoje;
 import static br.ce.wcaquino.matchers.MatchersPropios.ehHojeComDiferencaDeDias;
-import static br.ce.wcaquino.utils.DataUtils.obterDataComDiferencaDias;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -14,7 +13,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -30,7 +28,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import br.ce.wcaquino.builders.FilmeBuilder;
 import br.ce.wcaquino.builders.LocacaoBuilder;
@@ -44,13 +45,14 @@ import br.ce.wcaquino.utils.DataUtils;
 
 public class LocacaoServiceTest {
 
+	@InjectMocks
 	private LocacaoService service;
-
+	@Mock
 	private SPCService spc;
-	
+	@Mock
 	private EmailService email;
-	
-	LocacaoDAO dao;
+	@Mock
+	private LocacaoDAO dao;
 	
 	private List<Filme> filmes = new ArrayList<Filme>();
 
@@ -62,15 +64,8 @@ public class LocacaoServiceTest {
 
 	@Before
 	public void setup() {
-
-		service = new LocacaoService();
+		MockitoAnnotations.initMocks(this);
 		filmes = new ArrayList<Filme>();
-		dao = Mockito.mock(LocacaoDAO.class);
-		service.setLocacaoDAO(dao);
-		spc = Mockito.mock(SPCService.class);
-		service.setSPCService(spc);
-		email = Mockito.mock(EmailService.class);
-		service.setEmaiLService(email);
 	}
 
 	@Test
@@ -152,7 +147,7 @@ public class LocacaoServiceTest {
 	}
 	
 	@Test
-	public void naoDeveAlugarFilmeParaNegativadoSpc() throws FilmeSemEstoqueException{
+	public void naoDeveAlugarFilmeParaNegativadoSpc() throws Exception{
 		//cenario
 		Usuario usuario = umUsuario().agora();
 		List<Filme> filmes = Arrays.asList(umFilme().agora());
@@ -195,6 +190,23 @@ public class LocacaoServiceTest {
 		verify(email,Mockito.atLeast(1)).notificarAtraso(usuario3);
 		verify(email,never()).notificarAtraso(usuario2);
 		verifyNoMoreInteractions(email);
+	}
+
+	@Test
+	public void deveTratarErroNoSpc() throws Exception {
+		//cenario
+		Usuario usuario = umUsuario().agora();
+		List<Filme> filmes = Arrays.asList(umFilme().agora());
+		
+		when(spc.possuiNegativacao(usuario)).thenThrow(new Exception("Falha catastrófica"));
+
+		//verificacao
+		exception.expect(LocadoraException.class);
+		exception.expectMessage("Problemas com SPC, tente novamente");
+		
+		//acao
+		service.alugarFilme(usuario, filmes);
+	
 	}
 	
 }
