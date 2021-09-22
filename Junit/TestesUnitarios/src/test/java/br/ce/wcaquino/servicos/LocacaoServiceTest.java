@@ -18,9 +18,9 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,21 +34,18 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
 
 import br.ce.wcaquino.builders.FilmeBuilder;
 import br.ce.wcaquino.daos.LocacaoDAO;
 import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
+import br.ce.wcaquino.runners.ParallelRunner;
 import br.ce.wcaquino.servicos.exceptions.FilmeSemEstoqueException;
 import br.ce.wcaquino.servicos.exceptions.LocadoraException;
 import br.ce.wcaquino.utils.DataUtils;
 
-@PrepareForTest({ LocacaoService.class })
+@RunWith(ParallelRunner.class)
 public class LocacaoServiceTest {
 
 	@InjectMocks
@@ -73,6 +70,12 @@ public class LocacaoServiceTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		filmes = new ArrayList<Filme>();
+		System.out.println("Inicializando 2");
+	}
+	
+	@After
+	public void tearDown() {
+		System.out.println("finalizando 2");
 	}
 
 	@Test
@@ -191,6 +194,7 @@ public class LocacaoServiceTest {
 
 		// verificação
 		verify(email, times(3)).notificarAtraso(Mockito.any(Usuario.class));
+
 		verify(email).notificarAtraso(usuario);
 		verify(email, Mockito.atLeast(1)).notificarAtraso(usuario3);
 		verify(email, never()).notificarAtraso(usuario2);
